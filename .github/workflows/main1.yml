@@ -1,0 +1,21 @@
+name: Test and review Python workflow
+on: push
+jobs:
+  job_python:
+    runs-on: ubuntu-latest 
+    steps:
+      - name: Checkout the code on runner VM
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip          
+          pip install -r requirements.txt 
+      - name: Set the Python path
+        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV   
+      - name: Run tests
+        run: |
+          pytest tests --cov=app --cov-report=xml 
